@@ -1,0 +1,32 @@
+import pandas as pd
+import matplotlib as plt.pyplot
+pip install streamlit
+import streamlit as st
+st.title("STREAMLIT APP OF VGU")
+st.text(" welcome to our dashboard")
+st.header(" iam a header")
+st.write("you can write ", 10+5)
+name = st.text_input("enter your name:")
+age = st.number_input("enter age:")
+st.write("your nae is :,name ,"your age is :", age )
+st.selectbox("enter your course :" , ["BCA","BTECH","MCA"])
+if st.button("CLICK ME"):
+    st.success("Clicked button")
+file = st.file_uploader("Upload your file")
+if file:
+content = file.read()
+st.write("File uploaded Successfully !!!!")
+
+data = {"Name":["Tom" , "jack"], "Marks" : [10,20]}
+df = pd.DataFrame(data)
+st.dataframe(df)
+data = pd.DataFrame({
+"Marks":[10,20,20,10]
+})
+st.line_chart(data)
+st.bar_chart(data)
+subject = ["Python","C++","Java"]
+marks = [20,10,5]
+fig , ax = plt.subplot()
+ax.pie(marks, labels=subject,autopct='%1.1f%%')
+st.pyplot(fig)
