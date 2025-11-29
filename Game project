@@ -1,0 +1,81 @@
+import pygame
+
+pygame.init()
+screen = pygame.display.set_mode((600,600))
+pygame.display.set_caption("X O Game")
+
+WHITE = (255,255,255)
+BLACK = (0,0,0)
+size = 200
+
+board = [["","",""],
+         ["","",""],
+         ["","",""]]
+
+player = "X"
+font = pygame.font.Font(None, 100)
+run = True
+winner = None
+
+def check_winner():
+    # Rows
+    for row in board:
+        if row[0] == row[1] == row[2] != "":
+            return row[0]
+    # Columns
+    for col in range(3):
+        if board[0][col] == board[1][col] == board[2][col] != "":
+            return board[0][col]
+    # Diagonals
+    if board[0][0] == board[1][1] == board[2][2] != "":
+        return board[0][0]
+    if board[0][2] == board[1][1] == board[2][0] != "":
+        return board[0][2]
+    # Draw check
+    for row in board:
+        for col in row:
+            if col == "":
+                return None
+    return "Draw"
+
+while run:
+    screen.fill(WHITE)
+    
+    # Draw grid
+    pygame.draw.line(screen, BLACK, (200,0), (200,600), 5)
+    pygame.draw.line(screen, BLACK, (400,0), (400,600), 5)
+    pygame.draw.line(screen, BLACK, (0,200), (600,200), 5)
+    pygame.draw.line(screen, BLACK, (0,400), (600,400), 5)
+    
+    # Draw X and O
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] != "":
+                text = font.render(board[row][col], True, BLACK)
+                screen.blit(text, (col * size + 70, row * size + 50))
+    
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+        if event.type == pygame.MOUSEBUTTONDOWN and winner is None:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            row = mouse_y // 200
+            col = mouse_x // 200
+            if board[row][col] == "":
+                board[row][col] = player
+                winner = check_winner()
+                if winner is None:
+                    player = "O" if player == "X" else "X"
+    
+    # Show winner
+    if winner is not None:
+        if winner == "Draw":
+            text = font.render("Draw!", True, BLACK)
+        else:
+            text = font.render(f"{winner} Wins!", True, BLACK)
+        screen.blit(text, (150, 250))
+    
+    pygame.display.update()
+
+pygame.quit()
